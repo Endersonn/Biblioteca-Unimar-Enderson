@@ -267,6 +267,22 @@ begin
   writeln('Prestamo registrado con exito.');
 end;
 
+procedure MostrarAlumnosDesdeArchivo;
+var
+  ArchivoAlumnos: text;
+  Linea: string;
+begin
+  Assign(ArchivoAlumnos, 'alumnos.txt');
+  Reset(ArchivoAlumnos); // Abre el archivo para lectura
+  while not EOF(ArchivoAlumnos) do
+  begin
+    // Leer la línea completa del archivo
+    readln(ArchivoAlumnos, Linea);
+    // Mostrar la linea tal como está en el archivo
+    writeln(Linea);
+  end;
+  Close(ArchivoAlumnos);
+end;
 
 
 
@@ -355,7 +371,8 @@ begin
              else
                writeln('La cedula del alumno ingresada no existe.');
            end;
-      '4': begin    
+      '4': begin  
+       MostrarAlumnosDesdeArchivo;  
            end;
       '5': begin
            end;
