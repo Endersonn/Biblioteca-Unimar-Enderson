@@ -284,6 +284,34 @@ begin
   Close(ArchivoAlumnos);
 end;
 
+procedure MostrarLibrosDesdeArchivo;
+var
+  ArchivoLibros: text;
+  ID, Titulo, Categoria: string;
+  Existencias: integer;
+begin
+  Assign(ArchivoLibros, 'libros.txt');
+  Reset(ArchivoLibros); // Abre el archivo para lectura
+  while not EOF(ArchivoLibros) do
+  begin
+    // Leer los datos del libro por separado
+    readln(ArchivoLibros, ID);
+    readln(ArchivoLibros, Titulo);
+    readln(ArchivoLibros, Categoria);
+    readln(ArchivoLibros, Existencias);
+    
+    // Mostrar los datos del libro con el formato deseado
+    writeln('ID: ', ID);
+    writeln('Titulo: ', Titulo);
+    writeln('Categoria: ', Categoria);
+    writeln('Existencias: ', Existencias);
+    
+    // Salto de linea para separar los libros
+    writeln;
+  end;
+  Close(ArchivoLibros);
+end;
+
 
 
 
@@ -372,11 +400,14 @@ begin
                writeln('La cedula del alumno ingresada no existe.');
            end;
       '4': begin  
-       MostrarAlumnosDesdeArchivo;  
+       
            end;
       '5': begin
+      MostrarAlumnosDesdeArchivo;  
+      
            end;
       '6': begin
+      MostrarLibrosDesdeArchivo;
            end;
       '7': begin
            end;
