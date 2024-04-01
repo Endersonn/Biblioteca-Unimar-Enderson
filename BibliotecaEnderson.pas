@@ -2,6 +2,19 @@ program BibliotecaProyecto;
 
 uses
   SysUtils; // Necesario para FileExists
+  
+  type
+  Alumno = record
+    Nombre: string[50];
+    Cedula: string[15];
+  end;
+
+  Libro = record
+    ID: string[10];
+    Titulo: string[100];
+    Categoria: string[50];
+    Existencias: integer;
+  end;
 
 procedure MostrarMenu;
 begin
