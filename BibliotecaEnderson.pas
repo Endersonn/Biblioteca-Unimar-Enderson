@@ -267,6 +267,88 @@ begin
   writeln('Prestamo registrado con exito.');
 end;
 
+procedure DevolverLibro(cedula, idLibro: string);
+var
+  DatosLibro: array[1..4] of string;
+  ArchivoLibros, ArchivoPrestamos, ArchivoTemporal: text;
+  Linea, LineaTemporal: string;
+  Encontrado: boolean;
+begin
+  // Verificar si existe un prestamo activo para el libro y el alumno especificados
+  if not PrestamoActivo(cedula, idLibro) then
+  begin
+    writeln('No hay un prestamo activo para el libro especificado y el alumno.');
+    Exit;
+  end;
+
+  // Actualizar el número de existencias del libro
+  Assign(ArchivoLibros, 'libros.txt');
+  Assign(ArchivoTemporal, 'temporal.txt');
+  reset(ArchivoLibros);
+  rewrite(ArchivoTemporal);
+  Encontrado := False;
+  while not eof(ArchivoLibros) do
+  begin
+    readln(ArchivoLibros, Linea);
+    if Linea = idLibro then
+    begin
+      Encontrado := True;
+      readln(ArchivoLibros, DatosLibro[1]); // Leer titulo
+      readln(ArchivoLibros, DatosLibro[2]); // Leer categoria
+      readln(ArchivoLibros, DatosLibro[3]); // Leer existencias
+      DatosLibro[4] := IntToStr(StrToInt(DatosLibro[3]) + 1); // Sumar una unidad al número de existencias
+      writeln(ArchivoTemporal, idLibro);
+      writeln(ArchivoTemporal, DatosLibro[1]);
+      writeln(ArchivoTemporal, DatosLibro[2]);
+      writeln(ArchivoTemporal, DatosLibro[4]);
+    end
+    else
+    begin
+      writeln(ArchivoTemporal, Linea);
+      // Saltar lineas correspondientes al libro
+      readln(ArchivoLibros, LineaTemporal);
+      readln(ArchivoLibros, LineaTemporal);
+      readln(ArchivoLibros, LineaTemporal);
+    end;
+  end;
+  close(ArchivoLibros);
+  close(ArchivoTemporal);
+  erase(ArchivoLibros);
+  rename(ArchivoTemporal, 'libros.txt');
+
+  if not Encontrado then
+  begin
+    writeln('Error: No se encontró el libro con el ID especificado.');
+    Exit;
+  end;
+
+  // Eliminar el registro del prestamo del archivo de prestamos
+  Assign(ArchivoPrestamos, 'prestamos.txt');
+  Assign(ArchivoTemporal, 'temporal.txt');
+  reset(ArchivoPrestamos);
+  rewrite(ArchivoTemporal);
+  while not eof(ArchivoPrestamos) do
+  begin
+    readln(ArchivoPrestamos, Linea);
+    if (Copy(Linea, 1, 8) <> 'Cedula: ') or (Copy(Linea, 10, Length(cedula)) <> cedula) then
+      writeln(ArchivoTemporal, Linea)
+    else
+    begin
+      // Saltar las lineas correspondientes al prestamo
+      readln(ArchivoPrestamos, Linea);
+      readln(ArchivoPrestamos, Linea);
+      readln(ArchivoPrestamos, Linea);
+      readln(ArchivoPrestamos, Linea);
+    end;
+  end;
+  close(ArchivoPrestamos);
+  close(ArchivoTemporal);
+  erase(ArchivoPrestamos);
+  rename(ArchivoTemporal, 'prestamos.txt');
+
+  writeln('Libro devuelto con exito.');
+end;
+
 procedure MostrarPrestamosActivos;
 var
   ArchivoPrestamos: text;
@@ -329,12 +411,6 @@ begin
   Close(ArchivoLibros);
 end;
 
-
-
-
-
-
-
 procedure MostrarMenu;
 begin
   writeln('*** Menu Principal ***');
@@ -357,7 +433,7 @@ var
 begin
   repeat
     MostrarMenu;
-    Write('Seleccione una opción: ');
+    Write('Seleccione una opcion: ');
     Readln(Opcion);
     case Opcion of
       '1': begin
@@ -416,18 +492,21 @@ begin
              else
                writeln('La cedula del alumno ingresada no existe.');
            end;
-      '4': begin  
-       
+      '4': begin
+             Write('Ingrese la cedula del alumno: ');
+             Readln(CedulaAlumno);
+             Write('Ingrese el ID del libro: ');
+             Readln(IDLibro);
+             DevolverLibro(CedulaAlumno, IDLibro);
            end;
       '5': begin
-      MostrarAlumnosDesdeArchivo;  
-      
+             MostrarAlumnosDesdeArchivo;
            end;
       '6': begin
-      MostrarLibrosDesdeArchivo;
+             MostrarLibrosDesdeArchivo;
            end;
       '7': begin
-      MostrarPrestamosActivos;
+             MostrarPrestamosActivos;
            end;
       '8': begin
              writeln('Programa finalizado.');
