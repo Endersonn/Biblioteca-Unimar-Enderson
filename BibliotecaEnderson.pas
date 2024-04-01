@@ -1,7 +1,7 @@
 program BibliotecaProyecto;
 
 uses
-  SysUtils; // Necesario para FileExists
+  SysUtils,crt; // Necesario para FileExists
 
 
 type
@@ -413,6 +413,7 @@ end;
 
 procedure MostrarMenu;
 begin
+clrscr;
   writeln('*** Menu Principal ***');
   writeln('1. Agregar alumno');
   writeln('2. Agregar libro');
@@ -437,13 +438,16 @@ begin
     Readln(Opcion);
     case Opcion of
       '1': begin
+      clrscr;
              Write('Ingrese el nombre del alumno: ');
              Readln(Nombre);
              Write('Ingrese la cedula del alumno: ');
              Readln(Cedula);
              AgregarAlumno(Nombre, Cedula);
+             
            end;
       '2': begin
+      clrscr;
              Write('Ingrese el ID del libro: ');
              Readln(NuevoLibro.ID);
              Write('Ingrese el titulo del libro: ');
@@ -453,8 +457,11 @@ begin
              Write('Ingrese las existencias del libro: ');
              Readln(NuevoLibro.Existencias);
              AgregarLibro(NuevoLibro.ID, NuevoLibro.Titulo, NuevoLibro.Categoria, NuevoLibro.Existencias);
+             WriteLn('Presione Enter para continuar...');
+			ReadKey;
            end;
       '3': begin
+      clrscr;
              Write('Ingrese la cedula del alumno: ');
              Readln(CedulaAlumno);
              // Verificar si la cedula del alumno existe
@@ -491,24 +498,39 @@ begin
              end
              else
                writeln('La cedula del alumno ingresada no existe.');
+               WriteLn('Presione Enter para continuar...');
+			ReadKey;
            end;
       '4': begin
+      clrscr;
              Write('Ingrese la cedula del alumno: ');
              Readln(CedulaAlumno);
              Write('Ingrese el ID del libro: ');
              Readln(IDLibro);
              DevolverLibro(CedulaAlumno, IDLibro);
+             WriteLn('Presione Enter para continuar...');
+			ReadKey;
            end;
       '5': begin
+      clrscr;
              MostrarAlumnosDesdeArchivo;
+             WriteLn('Presione Enter para continuar...');
+			ReadKey;
            end;
       '6': begin
+      clrscr;
              MostrarLibrosDesdeArchivo;
+             WriteLn('Presione Enter para continuar...');
+			ReadKey;
            end;
       '7': begin
+      clrscr;
              MostrarPrestamosActivos;
+             WriteLn('Presione Enter para continuar...');
+			ReadKey;
            end;
       '8': begin
+      clrscr;
              writeln('Programa finalizado.');
            end;
     else
