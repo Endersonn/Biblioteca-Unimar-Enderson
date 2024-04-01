@@ -267,6 +267,23 @@ begin
   writeln('Prestamo registrado con exito.');
 end;
 
+procedure MostrarPrestamosActivos;
+var
+  ArchivoPrestamos: text;
+  Linea: string;
+begin
+  Assign(ArchivoPrestamos, 'prestamos.txt');
+  Reset(ArchivoPrestamos); // Abre el archivo para lectura
+  while not EOF(ArchivoPrestamos) do
+  begin
+    // Leer la linea completa del archivo
+    readln(ArchivoPrestamos, Linea);
+    // Mostrar la linea tal como está en el archivo
+    writeln(Linea);
+  end;
+  Close(ArchivoPrestamos);
+end;
+
 procedure MostrarAlumnosDesdeArchivo;
 var
   ArchivoAlumnos: text;
@@ -410,6 +427,7 @@ begin
       MostrarLibrosDesdeArchivo;
            end;
       '7': begin
+      MostrarPrestamosActivos;
            end;
       '8': begin
              writeln('Programa finalizado.');
